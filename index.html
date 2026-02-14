@@ -30,8 +30,10 @@ p{color:#9ca3af}
 .stat h3{font-size:2rem;color:#38bdf8}
 /* APP SLIDER */
 .app-slider{
-  overflow:hidden;
+  overflow-x:auto;
+  overflow-y:hidden;
   padding: 40px 0;
+  -webkit-overflow-scrolling: touch;
 }
 .row{display:flex;gap:30px;width:max-content;animation:scrollLeft 45s linear infinite;cursor:grab;touch-action:pan-x}
 .row.right{animation:scrollRight 45s linear infinite}
@@ -514,21 +516,34 @@ doubleApps.slice().reverse().forEach(function(app){
 
 /* Touch to pause scrolling */
 const rows = document.querySelectorAll('.row')
+const appSlider = document.querySelector('.app-slider')
+
 rows.forEach(row => {
+  // Pause on user interaction
   row.addEventListener('mousedown', () => {
     row.classList.add('paused')
   })
   row.addEventListener('touchstart', () => {
     row.classList.add('paused')
   })
+  
+  // Resume after interaction ends (with delay for smooth manual scrolling)
   row.addEventListener('mouseup', () => {
-    row.classList.remove('paused')
+    setTimeout(() => {
+      if (!appSlider.querySelector('.row:active')) {
+        row.classList.remove('paused')
+      }
+    }, 500)
   })
   row.addEventListener('touchend', () => {
-    row.classList.remove('paused')
+    setTimeout(() => {
+      row.classList.remove('paused')
+    }, 500)
   })
   row.addEventListener('mouseleave', () => {
-    row.classList.remove('paused')
+    setTimeout(() => {
+      row.classList.remove('paused')
+    }, 500)
   })
 })
 
